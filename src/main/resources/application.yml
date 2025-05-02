@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: card-server
+
+  config:
+    import: classpath:secret.yml
