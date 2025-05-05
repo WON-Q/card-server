@@ -16,9 +16,11 @@ public class CardResponse {
     @Schema(description = "카드 타입")
     private CardType cardType;
     @Schema(description = "카드 BIN")
-    private Integer cardBIN;
+    private String cardBIN;
     @Schema(description = "만료일")
     private String expiredAt;
     @Schema(description = "CVV")
-    private String cvv;
+    private String cardCvv;
+    @Schema(description = "카드 한도")
+    private Long cardLimit;
 }

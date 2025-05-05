@@ -33,8 +33,9 @@ public class CardService {
                 .cardType(req.getCardType())
                 .cardBIN(req.getCardBIN())
                 .expiredAt(LocalDate.parse(req.getExpiredAt()))
-                .cvv(req.getCvv())
+                .cardCvv(req.getCardCvv())
                 .account(account)
+                .cardLimit(req.getCardLimit())
                 .memberId(memberId)
                 .build();
 
@@ -46,7 +47,8 @@ public class CardService {
                 .cardType(saved.getCardType())
                 .cardBIN(saved.getCardBIN())
                 .expiredAt(saved.getExpiredAt().toString())
-                .cvv(saved.getCvv())
+                .cardCvv(saved.getCardCvv())
+                .cardLimit(saved.getCardLimit())
                 .build();
     }
 

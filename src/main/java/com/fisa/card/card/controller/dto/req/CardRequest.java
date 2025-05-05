@@ -11,23 +11,25 @@ import lombok.NoArgsConstructor;
 @Schema(description = "카드 생성 요청 DTO")
 public class CardRequest {
 
-    @Schema(description = "카드번호", example = "1234-5678-9012-3456")
+    @Schema(description = "카드번호", example = "1234567890123456")
     private String cardNumber;
 
     @Schema(description = "카드 타입", example = "CREDIT")
     private CardType cardType;
 
     @Schema(description = "카드 BIN", example = "123456")
-    private Integer cardBIN;
+    private String cardBIN;
 
     @Schema(description = "만료일", example = "2028-12-31")
     private String expiredAt;
 
     @Schema(description = "CVV", example = "123")
-    private String cvv;
+    private String cardCvv;
 
-    @Schema(description = "계좌번호", example = "3333058919925")
+    @Schema(description = "카드랑 연돈된 계좌번호", example = "3333058919925")
     private String accountNumber;
 
+    @Schema(description = "카드 한도", example = "100000")
+    private Long cardLimit;
 
 }

@@ -29,13 +29,16 @@ public class Card {
     private CardType cardType;
 
     @Column(nullable = false)
-    private Integer cardBIN;
+    private String cardBIN;
 
     @Column(nullable = false)
     private LocalDate expiredAt;
 
     @Column(nullable = false)
-    private String cvv;
+    private String cardCvv;
+
+    @Column(nullable = false)
+    private Long cardLimit;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
