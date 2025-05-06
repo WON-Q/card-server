@@ -18,6 +18,9 @@ public class CardService {
     private final CardRepository cardRepository;
     private final AccountRepository accountRepository;
 
+    /*
+     카드생성
+     */
     @Transactional
     public CardResponse createCard(Long memberId, CardRequest req) {
         Account account = accountRepository.findByAccountNumber(req.getAccountNumber())
@@ -29,7 +32,7 @@ public class CardService {
         }
 
         Card card = Card.builder()
-                .cardNumber(req.getCardNumber())
+                .cardNumber(req.getCardNumber().replaceAll("-", ""))
                 .cardType(req.getCardType())
                 .cardBIN(req.getCardBIN())
                 .expiredAt(LocalDate.parse(req.getExpiredAt()))

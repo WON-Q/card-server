@@ -31,10 +31,6 @@ public class Payment {
 
     private String cardNumber;
 
-    private String expiryDate;
-
-    private String cvv;
-
     @Enumerated(EnumType.STRING)
     private TransactionStatus transactionStatus;
 

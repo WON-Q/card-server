@@ -4,6 +4,7 @@ import com.fisa.card.card.domain.enums.CardType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
-@NoArgsConstructor
+@Builder
 @Schema(description = "결제 승인 요청 DTO")
 public class PaymentRequest {
 
@@ -47,4 +48,7 @@ public class PaymentRequest {
     @NotNull
     @Schema(description = "요청 일시", example = "2025-05-05T15:00:00")
     private LocalDateTime requestedAt;
+
+
+
 }

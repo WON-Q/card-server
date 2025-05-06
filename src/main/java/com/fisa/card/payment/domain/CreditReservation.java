@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "credit_reservation")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -26,4 +27,6 @@ public class CreditReservation {
     private LocalDateTime reservedAt;
 
     private boolean charged; //  월말 청구 후 true
+
+
 }

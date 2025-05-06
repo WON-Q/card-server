@@ -37,7 +37,6 @@ public class PaymentController {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new SecurityException("Missing or invalid Authorization header");
         }
-
         String token = authHeader.substring(7); // "Bearer " 제거
         jwtUtil.validateToken(token); // 유효성 검증
 

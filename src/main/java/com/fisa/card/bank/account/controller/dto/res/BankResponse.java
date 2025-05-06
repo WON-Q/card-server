@@ -14,4 +14,6 @@ public class BankResponse {
     private String reason;   // 실패 사유
     private Long balance;
 
+
+
 }

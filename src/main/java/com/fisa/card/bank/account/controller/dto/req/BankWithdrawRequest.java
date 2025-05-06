@@ -1,6 +1,6 @@
 package com.fisa.card.bank.account.controller.dto.req;
 
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
@@ -9,8 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankWithdrawRequest {
+
+    @Schema(description = "출금 요청 계좌번호", example = "1234567890123456", required = true)
     private String account;
+
+    @Schema(description = "출금 요청 금액", example = "100000", required = true)
     private Long amount;
-
-
 }

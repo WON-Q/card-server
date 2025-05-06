@@ -7,6 +7,7 @@ import com.fisa.card.card.domain.enums.CardType;
 import com.fisa.card.card.repository.CardRepository;
 import com.fisa.card.payment.controller.dto.req.PaymentRequest;
 import com.fisa.card.payment.controller.dto.res.PaymentResultResponse;
+import com.fisa.card.payment.domain.enums.TransactionStatus;
 import com.fisa.card.payment.repository.CreditReservationRepository;
 import com.fisa.card.payment.repository.PaymentRepository;
 import com.fisa.card.payment.service.PaymentService;
@@ -28,6 +29,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
@@ -104,7 +107,10 @@ class PaymentServiceTest {
 
         assertThat(result.getStatus()).isEqualTo("APPROVED");
 
+
+
         mockServer.verify(); // 이 시점에 요청이 정상적으로 갔는지 확인
+        verify(paymentRepository).save(argThat(p -> p.getTransactionStatus() == TransactionStatus.SUCCESS));
     }
 
 

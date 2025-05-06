@@ -23,8 +23,11 @@ public class AccountService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));   // 나중에 예외처리 리팩토일
 
+        String rawAccountNumber = request.getAccountNumber();
+        String sanitizedAccountNumber = rawAccountNumber.replaceAll("-", "");
+
         Account account = Account.builder()
-                .accountNumber(request.getAccountNumber())
+                .accountNumber(sanitizedAccountNumber)
                 .balance(request.getBalance())
                 .status(request.getStatus())
                 .member(member)

@@ -69,8 +69,6 @@ public class PaymentService {
                 .amount(request.getAmount())
                 .cardType(card.getCardType())
                 .cardNumber(request.getCardNumber())
-                .expiryDate(request.getExpiryDate())
-                .cvv(request.getCvv())
                 .requestedAt(request.getRequestedAt())
                 .transactionStatus(TransactionStatus.PENDING)
                 .build();
@@ -161,7 +159,7 @@ public class PaymentService {
     }
 
 
-
+    @Transactional
     public List<PaymentResponse> getCompletedPayments() {
         List<Payment> payments = paymentRepository.findByTransactionStatusIn(List.of(
                 TransactionStatus.SUCCESS,
