@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payment")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -20,6 +21,8 @@ public class Payment {
     private Long txnId;
 
     private Long paymentId;
+
+    private String merchant;
 
     private Long amount;
 
@@ -40,15 +43,4 @@ public class Payment {
     private LocalDateTime completeAt;
 
 
-    /**
-     * 승인인 결과가 처리된 후 update할 칼럼
-     */
-
-    public void setCompleteAt(LocalDateTime completeAt) {
-        this.completeAt = completeAt;
-    }
-
-    public void setTransactionStatus(TransactionStatus status) {
-        this.transactionStatus = status;
-    }
 }

@@ -12,5 +12,6 @@ import lombok.*;
 public class BankResponse {
     private String status;   // "SUCCESS" or "FAIL"
     private String reason;   // 실패 사유
+    private Long balance;
 
 }

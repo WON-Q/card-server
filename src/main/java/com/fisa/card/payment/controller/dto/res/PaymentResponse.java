@@ -1,12 +1,16 @@
 package com.fisa.card.payment.controller.dto.res;
 
+import com.fisa.card.card.domain.enums.CardType;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
 public class PaymentResponse {
-    private String authorizationId; // txnId → 문자열로 전달
-    private String status;          // "APPROVED"
-    private String message;         // "Payment authorized"
+    private String authorizationId;
+    private String status;
+    private Long amount;
+    private CardType cardType;
+    private String cardNumber;
+    private String merchant;
 }

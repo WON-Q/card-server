@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "account")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
