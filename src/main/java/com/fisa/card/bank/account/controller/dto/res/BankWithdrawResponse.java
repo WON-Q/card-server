@@ -9,11 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BankResponse {
-    private String status;   // "SUCCESS" or "FAIL"
-    private String reason;   // 실패 사유
+public class BankWithdrawResponse {
+    private String account;
+    private Long amount;
+    private String status;
     private Long balance;
-
 
 
 }

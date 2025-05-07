@@ -2,12 +2,10 @@ package com.fisa.card.payment.service;
 
 
 
+import com.fisa.card.bank.account.controller.dto.res.BankWithdrawResponse;
 import com.fisa.card.payment.domain.CreditReservation;
-import com.fisa.card.payment.domain.enums.TransactionStatus;
 import com.fisa.card.payment.repository.CreditReservationRepository;
 import com.fisa.card.bank.account.controller.dto.req.BankWithdrawRequest;
-import com.fisa.card.bank.account.controller.dto.res.BankResponse;
-import com.fisa.card.bank.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,8 +44,8 @@ public class CreditReservationService {
             HttpEntity<BankWithdrawRequest> httpEntity = new HttpEntity<>(request, headers);
 
             try {
-                ResponseEntity<BankResponse> response = restTemplate.exchange(
-                        bankWithdrawUrl, HttpMethod.POST, httpEntity, BankResponse.class);
+                ResponseEntity<BankWithdrawResponse> response = restTemplate.exchange(
+                        bankWithdrawUrl, HttpMethod.POST, httpEntity, BankWithdrawResponse.class);
 
                 if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null
                         && "SUCCESS".equals(response.getBody().getStatus())) {

@@ -1,6 +1,6 @@
 package com.fisa.card.payment.domain;
 
-import com.fisa.card.payment.domain.enums.TransactionStatus;
+import com.fisa.card.payment.domain.enums.PaymentStatus;
 import com.fisa.card.card.domain.enums.CardType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,9 +18,9 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long txnId;
-
     private Long paymentId;
+
+    private String transactionId;
 
     private String merchant;
 
@@ -32,9 +32,8 @@ public class Payment {
     private String cardNumber;
 
     @Enumerated(EnumType.STRING)
-    private TransactionStatus transactionStatus;
+    private PaymentStatus paymentStatus;
 
-    private LocalDateTime requestedAt;
 
     private LocalDateTime completeAt;
 

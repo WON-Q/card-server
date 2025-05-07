@@ -1,6 +1,6 @@
 package com.fisa.card.payment.domain.enums;
 
-public enum TransactionStatus {
+public enum PaymentStatus {
     PENDING,
     SUCCESS,
     FAILURE,

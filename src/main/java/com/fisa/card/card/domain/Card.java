@@ -12,6 +12,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Getter
+@Setter
 @Table(name="card")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

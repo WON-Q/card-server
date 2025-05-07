@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PaymentResponse {
-    private String authorizationId;
+    private String transactionId;
     private String status;
     private Long amount;
     private CardType cardType;
