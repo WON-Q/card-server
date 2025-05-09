@@ -1,7 +1,7 @@
-package com.fisa.card.bank.account.domain;
+package com.fisa.card.account.domain;
 
 import com.fisa.card.member.domain.Member;
-import com.fisa.card.bank.account.domain.enums.AccountStatus;
+import com.fisa.card.account.domain.enums.AccountStatus;
 import com.fisa.card.card.domain.Card;
 import jakarta.persistence.*;
 import lombok.*;

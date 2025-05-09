@@ -19,7 +19,7 @@ public class PaymentRequest {
 
     @NotNull
     @Schema(description = "PG사에서 생성한  트랜잭션ID", example = "txnid98765")
-    private String transactionId;
+    private String txnId;
 
     @NotBlank
     @Schema(description = "가맹점 이름", example = "교촌치킨")

@@ -23,8 +23,8 @@ public class CardRequest {
     @Schema(description = "만료일", example = "2028-12-31")
     private String expiredAt;
 
-    @Schema(description = "CVV", example = "123")
-    private String cardCvv;
+    @Schema(description = "cvc", example = "123")
+    private String cardCvc;
 
     @Schema(description = "카드랑 연돈된 계좌번호", example = "3333058919925")
     private String accountNumber;

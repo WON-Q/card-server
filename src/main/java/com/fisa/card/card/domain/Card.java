@@ -1,6 +1,6 @@
 package com.fisa.card.card.domain;
 
-import com.fisa.card.bank.account.domain.Account;
+import com.fisa.card.account.domain.Account;
 import com.fisa.card.card.domain.enums.CardType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +36,7 @@ public class Card {
     private LocalDate expiredAt;
 
     @Column(nullable = false)
-    private String cardCvv;
+    private String cardcvc;
 
     @Column(nullable = false)
     private Long cardLimit;

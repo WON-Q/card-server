@@ -1,4 +1,4 @@
-package com.fisa.card.bank.account.controller.dto.req;
+package com.fisa.card.account.dto.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

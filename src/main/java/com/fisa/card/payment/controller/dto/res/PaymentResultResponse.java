@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PaymentResultResponse {
-    private String transactionId; // txnId → 문자열로 전달
-    private PaymentStatus paymentStatus;       // "APPROVED"
+    private String txnId;
+    private PaymentStatus paymentStatus;
 }

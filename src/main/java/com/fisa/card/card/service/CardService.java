@@ -1,7 +1,7 @@
 package com.fisa.card.card.service;
 
-import com.fisa.card.bank.account.domain.Account;
-import com.fisa.card.bank.account.repository.AccountRepository;
+import com.fisa.card.account.domain.Account;
+import com.fisa.card.account.repository.AccountRepository;
 import com.fisa.card.card.controller.dto.req.CardRequest;
 import com.fisa.card.card.controller.dto.res.CardResponse;
 import com.fisa.card.card.domain.Card;
@@ -36,7 +36,7 @@ public class CardService {
                 .cardType(req.getCardType())
                 .cardBIN(req.getCardBIN())
                 .expiredAt(LocalDate.parse(req.getExpiredAt()))
-                .cardCvv(req.getCardCvv())
+                .cardcvc(req.getCardCvc())
                 .account(account)
                 .cardLimit(req.getCardLimit())
                 .memberId(memberId)
@@ -50,7 +50,7 @@ public class CardService {
                 .cardType(saved.getCardType())
                 .cardBIN(saved.getCardBIN())
                 .expiredAt(saved.getExpiredAt().toString())
-                .cardCvv(saved.getCardCvv())
+                .cardCvc(saved.getCardcvc())
                 .cardLimit(saved.getCardLimit())
                 .build();
     }

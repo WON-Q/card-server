@@ -2,10 +2,10 @@ package com.fisa.card.payment.service;
 
 
 
-import com.fisa.card.bank.account.controller.dto.res.BankWithdrawResponse;
+import com.fisa.card.account.dto.res.BankWithdrawResponse;
 import com.fisa.card.payment.domain.CreditReservation;
 import com.fisa.card.payment.repository.CreditReservationRepository;
-import com.fisa.card.bank.account.controller.dto.req.BankWithdrawRequest;
+import com.fisa.card.account.dto.req.BankWithdrawRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

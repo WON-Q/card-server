@@ -1,4 +1,4 @@
-package com.fisa.card.bank.account.controller.dto.res;
+package com.fisa.card.account.dto.res;
 
 
 import lombok.*;

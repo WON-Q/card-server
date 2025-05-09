@@ -1,8 +1,8 @@
-package com.fisa.card.bank.account.repository;
+package com.fisa.card.account.repository;
 
 
 
-import com.fisa.card.bank.account.domain.Account;
+import com.fisa.card.account.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.fisa.card.bank.account.domain.enums;
+package com.fisa.card.account.domain.enums;
 
 public enum AccountStatus {
     ACTIVE,        // 활성 상태

@@ -19,8 +19,8 @@ public class CardResponse {
     private String cardBIN;
     @Schema(description = "만료일")
     private String expiredAt;
-    @Schema(description = "CVV")
-    private String cardCvv;
+    @Schema(description = "Cvc")
+    private String cardCvc;
     @Schema(description = "카드 한도")
     private Long cardLimit;
 }

@@ -2,7 +2,7 @@ package com.fisa.card.member.domain;
 
 
 
-import com.fisa.card.bank.account.domain.Account;
+import com.fisa.card.account.domain.Account;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
