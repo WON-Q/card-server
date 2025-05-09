@@ -12,7 +12,7 @@ public class CreditReservationScheduler {
         this.creditReservationService = creditReservationService;
     }
 
-    @Scheduled(cron = "0 3 0 * * *") // 매일 자정에 실행
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
     public void processCreditReservations() {
         System.out.println("가보자잇");
         creditReservationService.processCreditReservations();

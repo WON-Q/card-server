@@ -45,7 +45,10 @@ public class CreditReservationService {
 
             try {
                 ResponseEntity<BankWithdrawResponse> response = restTemplate.exchange(
-                        bankWithdrawUrl, HttpMethod.POST, httpEntity, BankWithdrawResponse.class);
+                        bankWithdrawUrl,
+                        HttpMethod.POST,
+                        httpEntity,
+                        BankWithdrawResponse.class);
 
                 if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null
                         && "SUCCESS".equals(response.getBody().getStatus())) {
