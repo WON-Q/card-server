@@ -52,7 +52,6 @@ public class PaymentController {
      *
      * @param request PG사로부터 전달받은 결제 승인 요청 정보 (카드번호, 금액, 트랜잭션ID 등)
      * @return 결제 승인 처리 결과 (성공/실패 및 관련 정보)
-     * @see com.fisa.card.payment.service.PaymentService#authorizePayment
      */
     @PostMapping("/authorization")
     @Operation(summary = "결제 승인 요청", description = """
@@ -75,7 +74,16 @@ public class PaymentController {
     }
 
 
-
+    /**
+     * 완료된 결제(성공 또는 실패) 내역을 조회하는 API입니다.
+     *
+     * <p>
+     * 결제 승인 처리 이후의 모든 트랜잭션(PENDING 제외)을 조회하며,
+     * 상태는 {@code SUCCESS}, {@code FAILED} 두 가지가 포함됩니다.
+     * </p>
+     *
+     * @return 결제 트랜잭션 리스트 응답 (상태, 금액, 카드정보 등 포함)
+     */
     @GetMapping("/transactions")
     @Operation(summary = "결제 요청 목록 조회", description = "결제(실패,성공) 내역을 조회합니다.")
     public ResponseEntity<ApiResponse<List<PaymentResponse>>> getCompletedPayments() {
