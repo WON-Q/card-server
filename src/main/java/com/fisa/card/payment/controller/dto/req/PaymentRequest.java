@@ -22,8 +22,8 @@ public class PaymentRequest {
     private String txnId;
 
     @NotBlank
-    @Schema(description = "가맹점 이름", example = "교촌치킨")
-    private String merchantname;
+    @Schema(description = "가맹점 아이디", example = "1")
+    private Long merchantId;
 
     @NotNull
     @Schema(description = "결제 금액", example = "50000")

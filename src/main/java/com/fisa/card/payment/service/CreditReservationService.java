@@ -39,7 +39,7 @@ public class CreditReservationService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Authorization", bankServerToken);
+            //headers.set("Authorization", bankServerToken);
 
             HttpEntity<BankWithdrawRequest> httpEntity = new HttpEntity<>(request, headers);
 

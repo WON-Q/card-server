@@ -22,8 +22,7 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final JwtUtil jwtUtil;
-
+    //private final JwtUtil jwtUtil;
 
     /**
      * PG사에서 카드사로 결제 승인을 요청하는 API

@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
+@Schema(description = "카드 생성 응답 DTO")
 public class CardResponse {
     @Schema(description = "카드 ID")
     private Long cardId;
