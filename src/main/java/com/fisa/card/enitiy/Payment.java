@@ -2,7 +2,7 @@ package com.fisa.card.enitiy;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+
 
 /**
  * 결제 요청 정보를 저장하는 엔티티 클래스입니다.
@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "payment")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
