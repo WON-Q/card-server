@@ -48,7 +48,7 @@ public class Payment {
     private PaymentStatus paymentStatus;
 
     /**
-     * 청구 여부
+     * 은행에 청구 여부
      */
     @Column(nullable = false)
     private boolean charged;
@@ -59,5 +59,12 @@ public class Payment {
     public void updatePaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
+
+
+    /**
+     * 은행 청구 여부 상태값 변경하는 메서드
+     */
     public void updateCharged(boolean charged){this.charged=charged;}
+
+
 }
