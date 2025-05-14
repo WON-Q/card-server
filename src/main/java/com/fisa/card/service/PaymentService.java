@@ -70,7 +70,66 @@ public class PaymentService {
         BinInfo binInfo = binInfoRepository.findByBin(bin)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 카드 BIN 정보입니다."));
 
+        // 3. 카드 타입 분기 처리
+        try {
+            // 체크 카드일 경우
+            if (binInfo.getCardType() == CardType.DEBIT) {
+                //은행에 출금 요청
+                BankWithdrawRequest bankReq = new BankWithdrawRequest(
+                        card.getAccountNumber(),
+                        request.getAmount()
+                );
 
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+
+                HttpEntity<BankWithdrawRequest> httpEntity = new HttpEntity<>(bankReq, headers);
+
+                ResponseEntity<BankWithdrawResponse> response = restTemplate.exchange(
+                        bankWithdrawUrl,
+                        HttpMethod.POST,
+                        httpEntity,
+                        BankWithdrawResponse.class
+                );
+                        /*
+                          응답 성공했을떄
+                         */
+                if (response.getStatusCode().is2xxSuccessful()
+                        && response.getBody() != null
+                        && "SUCCESS".equals(response.getBody().getStatus())) {
+
+                    saved.updatePaymentStatus(PaymentStatus.SUCCESS);
+                    saved.updateCharged(true);
+
+                    return buildResponse(saved);
+                } else {
+                    saved.updatePaymentStatus(PaymentStatus.FAILED);
+                    return buildResponse(saved);
+                }
+
+            } else if (binInfo.getCardType() == CardType.CREDIT) {
+
+                // 1) 미청구 결제 총액 조회
+                Long unchargedTotal = paymentRepository.findUnchargedTotalByCardNumber(card.getCardNumber());
+                Long availableLimit = card.getCardLimit() - unchargedTotal;
+
+                if (availableLimit < request.getAmount()) {
+                    saved.updatePaymentStatus(PaymentStatus.FAILED);
+                    return buildResponse(saved);
+                }
+                // 신용카드 처리 (예약 저장)
+                saved.updatePaymentStatus(PaymentStatus.SUCCESS);
+                return buildResponse(saved);
+            }
+
+        } catch (Exception e) {
+            log.error("결제 처리 중 예외 발생", e);
+            saved.updatePaymentStatus(PaymentStatus.FAILED);
+            return buildResponse(saved);
+        }
+
+
+        saved.updatePaymentStatus(PaymentStatus.FAILED);
         return buildResponse(saved);
     }
 
