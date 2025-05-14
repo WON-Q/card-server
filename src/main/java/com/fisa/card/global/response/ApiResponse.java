@@ -31,4 +31,5 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> of(ResponseCode code) {
         return new ApiResponse<>(code.getCode(), code.getMessage(), null);
     }
+
 }
