@@ -38,7 +38,7 @@ public class Payment {
      * 결제된 금액을 입금해줘야 하는 계좌번호
      */
     @Column(name = "deposit_account", nullable = false)
-    private Long depositAccount;
+    private String depositAccount;
 
     /**
      * 결제 상태
@@ -59,5 +59,5 @@ public class Payment {
     public void updatePaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
-
+    public void updateCharged(boolean charged){this.charged=charged;}
 }
