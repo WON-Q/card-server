@@ -40,4 +40,20 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
     }
 
+    /**
+     *  결제 승인 요청 조회하는 API.
+     *
+     * <p>
+     *  Pg사가 카드사에 결제 요청한 내역 조회
+     * </p>
+     *
+     * @return 결제 트랜잭션 리스트 응답 (상태, 금액, 카드정보 등 포함)
+     */
+    @GetMapping("/view")
+    @Operation(summary = "전체 결제 요청 목록 조회", description = "결제 요청 전체 내역(PENDING, SUCCESS, FAILED )을 조회")
+    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getAllPayments() {
+        List<PaymentResponse> allPayments = paymentService.getAllPayments();
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, allPayments));
+    }
+
 }

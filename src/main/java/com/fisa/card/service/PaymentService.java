@@ -106,7 +106,7 @@ public class PaymentService {
                     saved.updatePaymentStatus(PaymentStatus.FAILED);
                     return buildResponse(saved);
                 }
-
+                // 신용카드일경우
             } else if (binInfo.getCardType() == CardType.CREDIT) {
 
                 // 1) 미청구 결제 총액 조회
@@ -141,7 +141,24 @@ public class PaymentService {
                 .build();
     }
 
+    /*
+      결제 요청 내역 조회
+     */
+    @Transactional
+    public List<PaymentResponse> getAllPayments() {
+        List<Payment> payments = paymentRepository.findAll();
 
+        return payments.stream()
+                .map(payment -> PaymentResponse.builder()
+                        .txnId(payment.getTxnId())
+                        .paymentStatus(payment.getPaymentStatus())
+                        .amount(payment.getAmount())
+                        .charged(payment.isCharged())
+                        .cardNumber(payment.getCardNumber())
+                        .depositAccount(payment.getDepositAccount())
+                        .build()
+                ).toList();
+    }
 
 
 }

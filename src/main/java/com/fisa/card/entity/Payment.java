@@ -60,6 +60,7 @@ public class Payment {
         this.paymentStatus = paymentStatus;
     }
 
+
     /**
      * 은행 청구 여부 상태값 변경하는 메서드
      */
