@@ -66,5 +66,4 @@ public class Payment {
      */
     public void updateCharged(boolean charged){this.charged=charged;}
 
-
 }
