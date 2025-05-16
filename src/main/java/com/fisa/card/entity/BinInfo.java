@@ -29,6 +29,7 @@ public class BinInfo {
     /**
      * 카드 유형
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "card_type", nullable = false)
     private CardType cardType;
 
