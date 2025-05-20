@@ -8,6 +8,8 @@ import lombok.*;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(description = "결제 승인 요청 DTO")
 public class PaymentRequest {
 
