@@ -19,7 +19,7 @@ public class PaymentRequest {
 
     @NotBlank
     @Schema(description = "결제된 금액을 입금해줘야 하는 계좌번호", example = "3333058911111")
-    private String depositAccount;
+    private String settlementAccountNumber;
 
     @NotNull
     @Schema(description = "결제 금액", example = "50000")
