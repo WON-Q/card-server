@@ -2,7 +2,9 @@ package com.fisa.card.controller;
 
 
 import com.fisa.card.dto.req.PaymentRequest;
+import com.fisa.card.dto.req.RefundRequest;
 import com.fisa.card.dto.res.PaymentResultResponse;
+import com.fisa.card.dto.res.RefundResponse;
 import com.fisa.card.global.response.ApiResponse;
 import com.fisa.card.global.response.ResponseCode;
 import com.fisa.card.service.PaymentService;
@@ -55,5 +57,23 @@ public class PaymentController {
         List<PaymentResponse> allPayments = paymentService.getAllPayments();
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, allPayments));
     }
+
+    /**
+     * PG사에서 카드사로 환불을 요청하는 API
+     *
+     * @param request PG사로부터 전달받은 환불 요청 정보 (트랜잭션ID 등)
+     * @return 환불 처리 결과 (성공/실패 및 관련 메시지)
+     */
+    @PostMapping("/refund")
+    @Operation(summary = "결제 환불 요청", description = """
+        PG사에서 카드사로 환불을 요청, 카드 타입에 따라 은행 서버 입금 또는 신용카드 취소 처리 수행
+        """)
+    public ResponseEntity<ApiResponse<RefundResponse>> refundPayment(
+            @Valid @RequestBody RefundRequest request
+    ) {
+        RefundResponse response = paymentService.refundPayment(request);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
+    }
+
 
 }
