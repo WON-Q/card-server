@@ -14,4 +14,8 @@ public interface CardClient {
     @PostMapping("/withdraw")
     BankWithdrawResponse withdrawFromBank(@RequestBody BankWithdrawRequest request);
 
+
+    @PostMapping("/deposit")
+    BankWithdrawResponse depositToBank(@RequestBody BankWithdrawRequest request);
+
 }
