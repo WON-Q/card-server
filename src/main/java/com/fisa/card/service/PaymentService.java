@@ -3,9 +3,11 @@ package com.fisa.card.service;
 
 import com.fisa.card.dto.req.BankWithdrawRequest;
 import com.fisa.card.dto.req.PaymentRequest;
+import com.fisa.card.dto.req.RefundRequest;
 import com.fisa.card.dto.res.BankWithdrawResponse;
 import com.fisa.card.dto.res.PaymentResponse;
 import com.fisa.card.dto.res.PaymentResultResponse;
+import com.fisa.card.dto.res.RefundResponse;
 import com.fisa.card.entity.*;
 import com.fisa.card.openfeign.CardClient;
 import com.fisa.card.repository.BinInfoRepository;
@@ -14,12 +16,9 @@ import com.fisa.card.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class PaymentService {
         Payment payment = Payment.builder()
                 .txnId(request.getTxnId())
                 .amount(request.getAmount())
-                .depositAccount(request.getDepositAccount())
+                .depositAccount(request.getSettlementAccountNumber())
                 .cardNumber(request.getCardNumber())
                 .paymentStatus(PaymentStatus.PENDING)
                 .charged(false)
@@ -121,9 +120,80 @@ public class PaymentService {
         }
     }
 
+    @Transactional
+    public RefundResponse refundPayment(RefundRequest request) {
+        // 1. 기존 결제 내역 조회
+        Payment payment = paymentRepository.findByTxnId(request.getTxnId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 거래 ID의 결제 내역이 없습니다."));
+        Card card = cardRepository.findByCardNumber(payment.getCardNumber())
+                .orElseThrow(() -> new IllegalArgumentException("해당 카드 정보를 찾을 수 없습니다."));
 
+        // 2. 결제 상태 확인 (성공한 거래만 환불 가능)
+        if (payment.getPaymentStatus() != PaymentStatus.SUCCESS) {
+            return RefundResponse.builder()
+                    .txnId(payment.getTxnId())
+                    .paymentStatus(PaymentStatus.FAILED)
+                    .build();
+        }
 
+        // 3. 카드 BIN 정보로 카드 타입 판단
+        String bin = payment.getCardNumber().substring(0, 6);
+        BinInfo binInfo = binInfoRepository.findByBin(bin)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 카드 BIN 정보입니다."));
 
+        try {
+            switch (binInfo.getCardType()) {
+                case DEBIT -> {
+
+                    // 체크카드 환불 → 은행에 입금 요청
+                    BankWithdrawRequest depositReq = new BankWithdrawRequest(
+                            card.getAccountNumber(),
+                            payment.getAmount()
+                    );
+
+                    BankWithdrawResponse bankResponse = cardClient.depositToBank(depositReq); // 은행 입금 요청
+
+                    if ("SUCCESS".equals(bankResponse.getStatus())) {
+                        payment.updatePaymentStatus(PaymentStatus.CANCELLED);
+                        payment.updateCharged(false);
+                    } else {
+                        return RefundResponse.builder()
+                                .txnId(payment.getTxnId())
+                                .paymentStatus(PaymentStatus.FAILED)
+                                .build();
+                    }
+                }
+
+                case CREDIT -> {
+                    // 신용카드 환불 → 예약 취소만 가능
+                    if (!payment.isCharged()) {
+                        payment.updatePaymentStatus(PaymentStatus.CANCELLED);
+                    } else {
+                        return RefundResponse.builder()
+                                .txnId(payment.getTxnId())
+                                .paymentStatus(PaymentStatus.FAILED)
+                                .build();
+                    }
+                }
+
+                default -> {
+                    throw new IllegalStateException("알 수 없는 카드 타입입니다.");
+                }
+            }
+
+            return RefundResponse.builder()
+                    .txnId(payment.getTxnId())
+                    .paymentStatus(payment.getPaymentStatus())
+                    .build();
+
+        } catch (Exception e) {
+            log.error("환불 처리 중 예외 발생", e);
+            return RefundResponse.builder()
+                    .txnId(payment.getTxnId())
+                    .paymentStatus(PaymentStatus.FAILED)
+                    .build();
+        }
+    }
 
     private PaymentResultResponse buildResponse(Payment payment) {
         return PaymentResultResponse.builder()
