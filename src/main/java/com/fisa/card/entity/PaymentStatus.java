@@ -24,4 +24,9 @@ public enum PaymentStatus {
      * 결제가 거절되거나 오류로 인해 실패한 상태
      */
     FAILED,
+
+    /**
+     * 결제가 환불된 상태
+     */
+    CANCELLED ,
 }
