@@ -41,6 +41,13 @@ public class PaymentService {
 
     @Transactional
     public PaymentResultResponse authorizePayment(PaymentRequest request) {
+
+
+        log.info("✅ 결제 승인 요청 수신: txnId={}, cardNumber={}, amount={}, settlementAccountNumber={}",
+                request.getTxnId(),
+                request.getCardNumber(),
+                request.getAmount(),
+                request.getSettlementAccountNumber());
         // 1. 카드 조회 및 유효성 검사
         Card card = cardRepository.findByCardNumber(request.getCardNumber())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카드번호가 존재하지 않습니다."));
@@ -84,7 +91,7 @@ public class PaymentService {
                     BankWithdrawResponse response = cardClient.withdrawFromBank(bankReq);
 
                     if ("SUCCESS".equals(response.getStatus())) {
-                        saved.updatePaymentStatus(PaymentStatus.SUCCESS);
+                        saved.updatePaymentStatus(PaymentStatus.SUCCEEDED);
                         saved.updateCharged(true);
                     } else {
                         saved.updatePaymentStatus(PaymentStatus.FAILED);
@@ -101,7 +108,7 @@ public class PaymentService {
                     if (availableLimit < request.getAmount()) {
                         saved.updatePaymentStatus(PaymentStatus.FAILED);
                     } else {
-                        saved.updatePaymentStatus(PaymentStatus.SUCCESS);
+                        saved.updatePaymentStatus(PaymentStatus.SUCCEEDED);
                     }
 
                     return buildResponse(saved);
@@ -129,7 +136,7 @@ public class PaymentService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 카드 정보를 찾을 수 없습니다."));
 
         // 2. 결제 상태 확인 (성공한 거래만 환불 가능)
-        if (payment.getPaymentStatus() != PaymentStatus.SUCCESS) {
+        if (payment.getPaymentStatus() != PaymentStatus.SUCCEEDED) {
             return RefundResponse.builder()
                     .txnId(payment.getTxnId())
                     .paymentStatus(PaymentStatus.FAILED)
