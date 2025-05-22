@@ -18,7 +18,7 @@ public enum PaymentStatus {
     /**
      * 결제가 정상적으로 승인 및 완료된 상태
      */
-    SUCCESS,
+    SUCCEEDED,
 
     /**
      * 결제가 거절되거나 오류로 인해 실패한 상태
