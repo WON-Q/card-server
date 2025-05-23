@@ -39,15 +39,27 @@ public class PaymentService {
     @Value("${bank.withdraw.url}")
     private String bankWithdrawUrl;
 
+    /*
+     PG사로부터 결제요청( 카드번호, 금액, 가맹점주 계좌(이건 출금 할 계좌가 아니고 만약 손님이 출금이 됬으면 나중에
+                                                   이걸 토대로 가맹점주에게 입금을 해줘야할 계좌)
+      결제테이블에는 boolean charged-- 은행에서 돈이 빠져나갔냐 판단하는 값  결제 성공되면 신용카드는(false) 체크카드(true)
+                    enum paystatus -- 결제요청온거에 대해 응답이 성공했는지 판단  (pending,success,failed)
+      결제요청은 바로 결제 테이블(Payment 테이블에 저장 pending)
+      결제요청을 바탕으로 카드조회, 카드 만료일 검사 후  카드번호로 bininfo 테이블에서 카드타입(신용,체크) 받아옴
+       신용카드  -- 한도 검사후  은행 출금 없이( 나중에 정산)  바로 success 처리
+       체크카드 --  은행에 (카드와 연동된 계좌번호( 사용자(손님)계좌번호) , 결제 금액 ) openfeign으로 요청후
+               --  응답 받음
+     */
     @Transactional
     public PaymentResultResponse authorizePayment(PaymentRequest request) {
 
 
-        log.info("✅ 결제 승인 요청 수신: txnId={}, cardNumber={}, amount={}, settlementAccountNumber={}",
+        log.info(" 결제 승인 요청 수신: txnId={}, cardNumber={}, amount={}, settlementAccountNumber={}",
                 request.getTxnId(),
                 request.getCardNumber(),
                 request.getAmount(),
                 request.getSettlementAccountNumber());
+
         // 1. 카드 조회 및 유효성 검사
         Card card = cardRepository.findByCardNumber(request.getCardNumber())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카드번호가 존재하지 않습니다."));
@@ -88,6 +100,7 @@ public class PaymentService {
                             request.getAmount()
                     );
 
+
                     BankWithdrawResponse response = cardClient.withdrawFromBank(bankReq);
 
                     if ("SUCCESS".equals(response.getStatus())) {
@@ -102,8 +115,9 @@ public class PaymentService {
 
                 case CREDIT -> {
                     // 신용카드 처리 (한도 확인 후 결제 예약)
-                    Long unchargedTotal = paymentRepository.findUnchargedTotalByCardNumber(card.getCardNumber());
-                    Long availableLimit = card.getCardLimit() - unchargedTotal;
+                    long unchargedTotal = paymentRepository.findUnchargedTotalByCardNumber(card.getCardNumber());
+                    long availableLimit = card.getCardLimit() - unchargedTotal;
+
 
                     if (availableLimit < request.getAmount()) {
                         saved.updatePaymentStatus(PaymentStatus.FAILED);
@@ -127,6 +141,14 @@ public class PaymentService {
         }
     }
 
+
+    /*
+      한불로직
+
+      PG사에서 전에 결제요청한 트랜잭션id 보내면 payment에서 결제상태가 success인지 판단하고
+               신용카드는 - 상태 cancl변경
+               체크카드는 - 은행에 결제된계좌랑 금액 요청해서  입금 처리
+     */
     @Transactional
     public RefundResponse refundPayment(RefundRequest request) {
         // 1. 기존 결제 내역 조회
