@@ -1,12 +1,12 @@
-# OpenJDK 17 이미지 사용
-FROM openjdk:17-jdk-slim
+# Reference: https://spring.io/guides/gs/spring-boot-docker/
+
+FROM openjdk:17-jdk-alpine
 
 # 인자 설정 - Jar_File
 ARG JAR_FILE=build/libs/*.jar
 
-# jar 파일 복사
+# jar 파일 복제
 COPY ${JAR_FILE} app.jar
 
-# Spring Boot 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "-Duser.timezone=Asia/Seoul", "/app.jar"]
-
+# 실행 명령어
+ENTRYPOINT ["java","-jar","-Duser.timezone=Asia/Seoul","/app.jar"]

@@ -1,4 +1,4 @@
-name: PG DEV API CI/CD
+name: Card Server DEV CI/CD
 
 on:
   push:
