@@ -127,8 +127,17 @@ public class PaymentService {
         }
     }
 
+    /**
+     * 결제 환불 요청 처리
+     *
+     * @param request 환불 요청 정보 (트랜잭션 ID 등)
+     * @return 환불 처리 결과 (성공/실패 및 관련 메시지)
+     */
     @Transactional
     public RefundResponse refundPayment(RefundRequest request) {
+
+        log.info("💳 카드사 - 환불 요청 도착: txnId={}", request.getTxnId());
+
         // 1. 기존 결제 내역 조회
         Payment payment = paymentRepository.findByTxnId(request.getTxnId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 거래 ID의 결제 내역이 없습니다."));
@@ -136,6 +145,11 @@ public class PaymentService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 카드 정보를 찾을 수 없습니다."));
 
         // 2. 결제 상태 확인 (성공한 거래만 환불 가능)
+
+//        if (payment.getPaymentStatus() == PaymentStatus.CANCELLED) {
+//            throw new IllegalStateException("이미 환불된 결제입니다.");
+//        }
+
         if (payment.getPaymentStatus() != PaymentStatus.SUCCEEDED) {
             return RefundResponse.builder()
                     .txnId(payment.getTxnId())
@@ -187,6 +201,9 @@ public class PaymentService {
                     throw new IllegalStateException("알 수 없는 카드 타입입니다.");
                 }
             }
+
+            log.info("💳 카드사 - 환불 처리 완료: txnId={}, paymentStatus={}",
+                    payment.getTxnId(), payment.getPaymentStatus());
 
             return RefundResponse.builder()
                     .txnId(payment.getTxnId())
